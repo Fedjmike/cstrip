@@ -153,6 +153,12 @@ int main (int argc, char** argv) {
     }
 
     FILE* file = fopen(argv[1], "rb");
+
+    if (!file) {
+        printf("No file named '%s'\n", argv[1]);
+        return 2;
+    }
+
     size_t length;
     std::string contents = getFile(file, &length);
     fclose(file);
