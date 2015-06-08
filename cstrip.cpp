@@ -16,7 +16,7 @@ typedef std::function<void (void)> next_t;
 typedef std::function<bool (void)> end_t;
 typedef std::function<void (char)> out_t;
 
-void skip (current_t current, next_t next, end_t end, out_t out) {
+bool skip (current_t current, next_t next, end_t end, out_t out) {
     auto skipComment = [&]() {
         /*C comment*/
         if (current() == '*') {
@@ -45,8 +45,14 @@ void skip (current_t current, next_t next, end_t end, out_t out) {
             out('/');
     };
 
+    bool newline = false;
+
     while (true) {
-        if (isspace(current())) {
+        if (current() == '\n') {
+            next();
+            newline = true;
+
+        } else if (isspace(current())) {
             next();
 
         } else if (current() == '/') {
@@ -63,6 +69,8 @@ void skip (current_t current, next_t next, end_t end, out_t out) {
         } else
             break;
     }
+
+    return newline;
 }
 
 bool isalnumscore (char c) {
@@ -103,9 +111,14 @@ char* cstrip (const char* input, size_t length = -1) {
         next();
     };
 
+    bool newline = false;
+
     while (!end()) {
         if (unsafe(prev, current()))
-            out(' ');
+            out(newline ? '\n' : ' ');
+
+        else if (newline && prev != 0)
+            out('\n');
 
         /*Wait until a skippable character*/
         while (!isspace(current()) && current() != '#' && current() != '/' && !end()) {
@@ -126,7 +139,7 @@ char* cstrip (const char* input, size_t length = -1) {
         }
 
         /*Skip until meaningful characters*/
-        skip(current, next, end, out);
+        newline = skip(current, next, end, out);
     }
 
     puts("");
