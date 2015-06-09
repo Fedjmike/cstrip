@@ -17,3 +17,14 @@ Examples
     10982
     $ cstrip c4.c | wc -c
     12731
+
+Todo
+----
+
+- Avoid removing whitespace between operators that form a different, compound operator.
+- Add configuration options:
+  - Leave comments
+  - Leave whitespace
+  - Leave newlines
+  - Leave indentation
+  - Language
