@@ -153,7 +153,7 @@ std::string getFile (FILE* file, size_t* length_o) {
     if (length_o)
         *length_o = length;
 
-    char* contents = new char[length];
+    char* contents = new char[length+1]();
     fread(contents, 1, length, file);
 
     return std::string(contents);
