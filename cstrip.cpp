@@ -141,8 +141,6 @@ char* cstrip (const char* input, size_t length = -1) {
         /*Skip until meaningful characters*/
         newline = skip(current, next, end, out);
     }
-
-    puts("");
 }
 
 std::string getFile (FILE* file, size_t* length_o) {
