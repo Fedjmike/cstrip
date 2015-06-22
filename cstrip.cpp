@@ -71,7 +71,7 @@ bool isalnumscore (char c) {
 }
 
 bool unsafe (char prev, char next) {
-    return (isalnumscore(prev) && isalnumscore(next));
+    return isalnumscore(prev) && isalnumscore(next);
 }
 
 char* cstrip (const char* input, size_t length = -1) {
