@@ -59,13 +59,6 @@ bool skip (current_t current, next_t next, end_t end, out_t out) {
             next();
             skipComment();
 
-        /*Preprocessor directive*/
-        } else if (current() == '#') {
-            next();
-
-            while (current() != '\n')
-                next();
-
         } else
             break;
     }
@@ -121,7 +114,7 @@ char* cstrip (const char* input, size_t length = -1) {
             out('\n');
 
         /*Wait until a skippable character*/
-        while (!isspace(current()) && current() != '#' && current() != '/' && !end()) {
+        while (!isspace(current()) && current() != '/' && !end()) {
             /*Being inside a string makes skippable characters unskippable*/
             if (current() == '"' || current() == '\'') {
                 char delim = current();
@@ -133,9 +126,16 @@ char* cstrip (const char* input, size_t length = -1) {
 
                     repeat();
                 }
-            }
 
-            repeat();
+                repeat();
+
+            /*Preprocessor directive*/
+            } else if (current() == '#') {
+                while (current() != '\n')
+                    repeat();
+
+            } else
+                repeat();
         }
 
         /*Skip until meaningful characters*/
